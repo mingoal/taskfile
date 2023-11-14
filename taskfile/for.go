@@ -43,6 +43,9 @@ func (f *For) UnmarshalYAML(node *yaml.Node) error {
 		}
 		if err := node.Decode(&forStruct); err == nil && forStruct.Var != "" {
 			f.Var = forStruct.Var
+			if forStruct.Split == "\\n" {
+				forStruct.Split = "\n"
+			}
 			f.Split = forStruct.Split
 			f.As = forStruct.As
 			return nil
