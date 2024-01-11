@@ -234,14 +234,14 @@ func Taskfile(
 					includedTaskfile.Env.Set(k, o)
 					return nil
 				})
-
+				r := templater.Templater{Vars: includedTask.Vars, RemoveNoValue: true}
 				for _, task := range includedTaskfile.Tasks.Values() {
-					task.Dir = filepathext.SmartJoin(dir, task.Dir)
 					if task.IncludeVars == nil {
 						task.IncludeVars = &taskfile.Vars{}
 					}
 					task.IncludeVars.Merge(includedTask.Vars)
 					task.IncludedTaskfileVars = includedTaskfile.Vars
+					task.Dir = filepathext.SmartJoin(dir, r.Replace(task.Dir))
 					task.IncludedTaskfile = &includedTask
 				}
 			}
